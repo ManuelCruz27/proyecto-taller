@@ -91,16 +91,54 @@ namespace PrototipoDos.Empleados
 
         private void btnActualizar_Click(object sender, EventArgs e)
         {
+           
             ActualizarDatosEmpleado();
-            BorrarTexto();
+            
         }
 
         private void ActualizarDatosEmpleado()
         {
+            int EmpleadoId;
+
+            if (!int.TryParse(txtBuscar.Text, out EmpleadoId))
+            {
+                MessageBox.Show("Por favor, Asegurate de buscar el empleadoID.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtNombre.Text))
+            {
+                MessageBox.Show("Por favor, asegúrate de que el campo 'Nombre' no este vacio.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtApellidoPaterno.Text))
+            {
+                MessageBox.Show("Por favor, asegúrate de que el campo 'Apellido paterno' no este vacio.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtApellidoMaterno.Text))
+            {
+                MessageBox.Show("Por favor, asegúrate de que el campo 'Apellido materno' no este vacio.");
+                return;
+            }
+            if (string.IsNullOrEmpty(cmbSexo.Text))
+            {
+                MessageBox.Show("Por favor, asegúrate de que el campo 'Sexo' no este vacio.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtCorreoEletronico.Text))
+            {
+                MessageBox.Show("Por favor, asegúrate de que el campo 'Correo Eletronico' no este vacio.");
+                return;
+            }
+            if (string.IsNullOrEmpty(txtNumero.Text))
+            {
+                MessageBox.Show("Por favor, asegúrate de que el campo 'Numero Telefonico' no este vacio.");
+                return;
+            }
             GestionPersonalEmpleado empleado = new GestionPersonalEmpleado
             {
                 // EmpleadoId = int.Parse(txtId.Text),
-                EmpleadoId = int.Parse(txtBuscar.Text),
+                EmpleadoId = EmpleadoId,
                 Nombre = txtNombre.Text,
                 ApellidoPaterno = txtApellidoPaterno.Text,
                 ApellidoMaterno = txtApellidoMaterno.Text,
@@ -109,7 +147,8 @@ namespace PrototipoDos.Empleados
                 NumeroCelular = txtNumero.Text,
             };
 
-            _dataAccessLeyer.ActualizarDatosEmpleado(empleado);
+             _dataAccessLeyer.ActualizarDatosEmpleado(empleado);
+             BorrarTexto();
 
         }
 

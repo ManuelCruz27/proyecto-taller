@@ -33,6 +33,7 @@ namespace PrototipoDos.Pedido_Broqueleros
             txtPedidoID.ReadOnly = true;
             txtProducto.ReadOnly = true;
             txtKilataje.ReadOnly = true;
+            txtPagoPorTrabajo.ReadOnly = true;
 
             GridVerPedidos.DefaultCellStyle.Font = new Font("Arial", 16);
             GridVerPedidos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -43,6 +44,13 @@ namespace PrototipoDos.Pedido_Broqueleros
             txtTotalPares.TextChanged += txtTotalPares_TextChanged;
 
 
+            txtPedidoDetalle.KeyPress += txtPedidoDetalleID_KeyPress;
+            txtTotalPares.KeyPress += txtTotalPares_KeyPress;
+            txtPesoFinal.KeyPress += txtPesoFinal_KeyPress;
+            txtSobranteDeTuerca.KeyPress += txtSobranteDeTuerca_KeyPress;
+            txtPesoMalo.KeyPress += txtPesoMalo_KeyPress;
+            txtMerma.KeyPress += txtMerma_KeyPress;
+            txtBuscar.KeyPress += txtBuscar_KeyPress;
 
             // GridVerPedidosDetalles.CellFormatting += dataGridView1_CellFormatting;
 
@@ -63,40 +71,12 @@ namespace PrototipoDos.Pedido_Broqueleros
 
                 CargarPedidos();
                 cargarPedidoDetalle();
-                //MessageBox.Show("Hay que ingresar el numero del pedidoID a buscar. ");
+                MessageBox.Show("Hay que ingresar el numero del pedidoID a buscar. ");
 
             }
             else
             {
-                var PedidoEncontrado = _FinalizarPedidos.BuscarPedido(BuscarText);
-                //var CargarDatosPedido = _FinalizarPedidos.CargarDatosPedido(BuscarText);
-                if (PedidoEncontrado != null)
-                {
-                    MostrarPedidos(PedidoEncontrado);
-                    //CargarDatosPedidos(CargarDatosPedido);
-
-                    var PedidoDetalleEncontrado = _FinalizarPedidos.BuscarPedidoDetalle(BuscarText);
-                    MostrarPedidoDetalle(PedidoDetalleEncontrado);
-
-                    var CargarDatosPedidoDetalle = _FinalizarPedidos.CargarDatosPedidoDetalle(BuscarText);
-                    if (CargarDatosPedidoDetalle != null)
-                    {
-
-                        CargarDatosPedidosDetalles(CargarDatosPedidoDetalle);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Fallo el proceso de carga de datos");
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("No se encontro el empleado.");
-                }
-
-
-                txtBuscar.Text = string.Empty;
+                Buscarpedidos(BuscarText);
 
 
 
@@ -112,6 +92,41 @@ namespace PrototipoDos.Pedido_Broqueleros
                 }*/
             }
         }
+
+
+        private void Buscarpedidos(string BuscarText)
+        {
+            var PedidoEncontrado = _FinalizarPedidos.BuscarPedido(BuscarText);
+            //var CargarDatosPedido = _FinalizarPedidos.CargarDatosPedido(BuscarText);
+            if (PedidoEncontrado != null)
+            {
+                MostrarPedidos(PedidoEncontrado);
+                //CargarDatosPedidos(CargarDatosPedido);
+
+                var PedidoDetalleEncontrado = _FinalizarPedidos.BuscarPedidoDetalle(BuscarText);
+                MostrarPedidoDetalle(PedidoDetalleEncontrado);
+
+                var CargarDatosPedidoDetalle = _FinalizarPedidos.CargarDatosPedidoDetalle(BuscarText);
+                if (CargarDatosPedidoDetalle != null)
+                {
+
+                    CargarDatosPedidosDetalles(CargarDatosPedidoDetalle);
+                }
+                else
+                {
+                    MessageBox.Show("Fallo el proceso de carga de datos");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("No se encontro el empleado.");
+            }
+
+
+            txtBuscar.Text = string.Empty;
+        }
+
 
         #region Cargar pedidos
 
@@ -269,7 +284,14 @@ namespace PrototipoDos.Pedido_Broqueleros
                 else
                 {
                     var BuscarPedidoDetalleDos = _FinalizarPedidos.BuscarPedidoDetalleDos(BuscarPedidoText, BuscarPedidoDetalleText);
-                    CargarDatosPedidosDetalles(BuscarPedidoDetalleDos);
+
+                    if (BuscarPedidoDetalleDos != null)
+                    {
+                        CargarDatosPedidosDetalles(BuscarPedidoDetalleDos);
+                    }
+                    else {
+                        MessageBox.Show("No se encontro ningun PedidoDetalleID relacionado con el pedido." + txtPedidoID.Text);
+                    }
 
                 }
 
@@ -300,6 +322,8 @@ namespace PrototipoDos.Pedido_Broqueleros
 
         private void CargarDatosFinalizar()
         {
+            string BuscarText = txtPedidoID.Text;
+
             // Inicializamos variables para almacenar los valores convertidos
             int EmpleadoId, PedidoId, PedidoDetalleId;
             decimal TotalPares, PesoFinal, SobranteTuerca, PesoMalo, PesoMerma, PagoPorTrabajo;
@@ -375,11 +399,124 @@ namespace PrototipoDos.Pedido_Broqueleros
 
             // Llamada al método Operador de _FinalizarPedidos
             _FinalizarPedidos.Operador(FinalizarPedido);
+            Buscarpedidos(BuscarText);
+
+            var borador = _FinalizarPedidos.StatusPedido(BuscarText);
+
+            if ( borador != null && borador.StatusId == 4)
+            {
+                txtEmpleadoID.Text = string.Empty;
+                txtEmpleado.Text = string.Empty;
+            }
+
+
         }
 
 
 
+        #region validaciones
 
+        private void txtPedidoDetalleID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            SoloNumeros(sender, e, 6);
+        }
+
+
+        private void txtTotalPares_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ValidalcionDeNumerosYLongitud(sender, e, 6);
+        }
+        private void txtPesoFinal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ValidalcionDeNumerosYLongitud(sender, e, 6);
+        }
+
+        private void txtSobranteDeTuerca_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ValidalcionDeNumerosYLongitud(sender,e,6);
+
+        }
+
+        private void txtPesoMalo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ValidalcionDeNumerosYLongitud(sender, e, 6);
+        }
+        private void txtMerma_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ValidalcionDeNumerosYLongitud(sender, e, 6);
+        }
+        private void txtBuscar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            SoloNumeros(sender, e, 10);
+        }
+
+
+        private void SoloNumeros(object sender, KeyPressEventArgs e, int Longitud)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) )
+            {
+                e.Handled = true;
+            }
+
+
+            if (textBox.TextLength >= Longitud && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+
+
+        }
+
+
+        private void ValidalcionDeNumerosYLongitud(object sender, KeyPressEventArgs e, int Longitud)
+        {
+            TextBox textBox = (TextBox)sender;
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            bool hasDecimalPoint = (sender as TextBox).Text.Contains('.');
+
+            if (e.KeyChar == '.')
+            {
+                if (hasDecimalPoint || string.IsNullOrEmpty((sender as TextBox).Text))
+                {
+                    e.Handled = true;
+                }
+            }
+
+            if (textBox.TextLength >= Longitud && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+
+
+        }
+
+
+        //private void Largo(object sender, KeyPressEventArgs e, int longitud)
+        //{
+        //    TextBox textBox = (TextBox)sender;
+
+
+        //    if(textBox.TextLength >= longitud && e.KeyChar != (char)Keys.Back)
+        //    {
+        //        e.Handled = true;
+        //    }
+
+
+        //    //// Verificar si el carácter ingresado es una letra o un número
+        //    //if (!char.IsLetterOrDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+        //    //{
+        //    //    e.Handled = true;
+        //    //}
+
+        //}
+
+
+        #endregion
 
 
 

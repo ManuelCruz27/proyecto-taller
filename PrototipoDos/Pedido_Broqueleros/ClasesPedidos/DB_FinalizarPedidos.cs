@@ -41,6 +41,27 @@ namespace PrototipoDos.Pedido_Broqueleros.ClasesPedidos
         
         }
 
+        public InvPedidosBroquelero StatusPedido(string BuscarText)
+        {
+
+            int.TryParse(BuscarText, out int idPedido);
+
+            var CargarDatosPedido = _context.InvPedidosBroqueleros.Where(e => e.PedidoId == idPedido)
+                                    .Select(e => new InvPedidosBroquelero
+                                    {
+                                        StatusId = e.StatusId
+
+                                    })
+                                    .FirstOrDefault();
+
+
+
+            return CargarDatosPedido;
+
+        }
+
+
+
         public InvPedidosBroquelero CargarDatosPedido(string BuscarText)
         {
            
@@ -49,7 +70,8 @@ namespace PrototipoDos.Pedido_Broqueleros.ClasesPedidos
             var CargarDatosPedido = _context.InvPedidosBroqueleros.Where(e => e.PedidoId == idPedido && e.StatusId == 1)
                                     .Select(e => new InvPedidosBroquelero{
                                     PedidoId = e.PedidoId,
-                                    EmpleadoId = e.EmpleadoId
+                                    EmpleadoId = e.EmpleadoId,
+
                                     })
                                     .FirstOrDefault();
 
@@ -142,26 +164,74 @@ namespace PrototipoDos.Pedido_Broqueleros.ClasesPedidos
         public void Operador(PedidosBroquelerosEntrada FinalizarPedido)
         {
             StatusDetalleOperador(FinalizarPedido);
-               
+            
+
+
 
         }
 
         private void StatusDetalleOperador(PedidosBroquelerosEntrada FinalizarPedido)
         {
-            var status = _context.PedidosBroquelerosSalida.Where( e => e.StatusPedidoDetalleId == 1 && e.PedidoDetalleId == FinalizarPedido.PedidoDetalleId)
-                                                          .Select(e => new PedidosBroquelerosSalidum
-                                                          {
-                                                              StatusPedidoDetalleId = e.StatusPedidoDetalleId
+            // Buscar el objeto existente en la base de datos
+            var status = _context.PedidosBroquelerosSalida
+                                 .FirstOrDefault(e => e.StatusPedidoDetalleId == 1 && e.PedidoDetalleId == FinalizarPedido.PedidoDetalleId);
 
-                                                          })
-                                                            .FirstOrDefault();
+           
+
+                // Verificar si se encontró un objeto y si el ID de estado es 1
+                if (status != null && status.StatusPedidoDetalleId == 1)
+                {
+                    // Actualizar el estado
+                    status.StatusPedidoDetalleId = 4;
+
+                    // Guardar los cambios en la base de datos
+                    _context.SaveChanges();
+
+                    CambiarEstatusPedido(FinalizarPedido);
+            }
+            else
+                {
+                    // Manejar el caso donde no se encontró el objeto o el estado no es 1
+                    MessageBox.Show("No se encontró un pedido con el detalle especificado o el estado no es 1.");
+                }
             
-            MessageBox.Show(status.StatusPedidoDetalleId.ToString());
+        }
 
+        public void CambiarEstatusPedido(PedidosBroquelerosEntrada FinalizarPedido)
+        {
+            // Contar los registros que no tienen StatusPedidoDetalleID igual a 4 para el PedidoID dado
+            int countNonDesiredStatus = _context.PedidosBroquelerosSalida
+                                                .Where(e => e.PedidoId == FinalizarPedido.PedidoId && e.StatusPedidoDetalleId != 4)
+                                                .Count();
 
+            // Si no hay registros con StatusPedidoDetalleID diferente de 4
+            if (countNonDesiredStatus == 0)
+            {
+                // Buscar el pedido para actualizar su StatusID
+                var pedidoToUpdate = _context.InvPedidosBroqueleros
+                                             .FirstOrDefault(p => p.PedidoId == FinalizarPedido.PedidoId);
+
+                if (pedidoToUpdate != null)
+                {
+                    pedidoToUpdate.StatusId = 4;
+                    _context.SaveChanges();
+                    MessageBox.Show("Se ha finalizado el pedidoID: " + FinalizarPedido.PedidoId);
+                }
+                else
+                {
+                    MessageBox.Show("Pedido no encontrado.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se puede actualizar el pedido porque no todos los registros tienen estatus igual a 4.");
+            }
         }
 
 
+
+        private void DarEntradaPedido(PedidosBroquelerosEntrada entrada) { 
+        }
     }
 
     

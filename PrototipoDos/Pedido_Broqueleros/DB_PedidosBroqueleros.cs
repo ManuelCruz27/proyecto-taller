@@ -106,7 +106,7 @@ namespace PrototipoDos.Pedido_Broqueleros
 
 
 
-        public void CrearPedido(PedidosBroquelerosSalidum pedido)
+        public void     CrearPedido(PedidosBroquelerosSalidum pedido)
         {
             try
             {

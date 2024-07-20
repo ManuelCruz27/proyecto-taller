@@ -136,3 +136,4 @@ C:\Users\manue\source\repos\PrototipoDos\PrototipoDos\obj\Debug\net8.0-windows\P
 C:\Users\manue\source\repos\PrototipoDos\PrototipoDos\obj\Debug\net8.0-windows\PrototipoDos.Tabajos_Broqueleros.VerTrabajos.resources
 C:\Users\manue\source\repos\PrototipoDos\PrototipoDos\obj\Debug\net8.0-windows\PrototipoDos.Pedido_Broqueleros.CrearPedidoBroqueleros.resources
 C:\Users\manue\source\repos\PrototipoDos\PrototipoDos\obj\Debug\net8.0-windows\PrototipoDos.Pedido_Broqueleros.FinalizarPedidos.resources
+C:\Users\manue\source\repos\PrototipoDos\PrototipoDos\obj\Debug\net8.0-windows\PrototipoDos.sourcelink.json

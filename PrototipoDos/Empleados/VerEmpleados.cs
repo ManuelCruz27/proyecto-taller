@@ -38,8 +38,9 @@ namespace PrototipoDos
             GridEmpleados.DefaultCellStyle.Font = new Font("Arial", 16);
             // Ajustar automáticamente el ancho de las columnas según el contenido
             GridEmpleados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
+            txtBuscar.KeyPress += txtBuscar_KeyPress;
         }
+
 
         private void AgregarEmpleadoForm_EmpleadoAgregado(object sender, EventArgs e)
         {
@@ -58,6 +59,30 @@ namespace PrototipoDos
         
 
         }
+
+        private void txtBuscar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            
+                TextBox textBox = (TextBox)sender;
+
+
+                if (textBox.TextLength >= 35 && e.KeyChar != (char)Keys.Back)
+                {
+                    e.Handled = true;
+                }
+
+
+                //// Verificar si el carácter ingresado es una letra o un número
+                //if (!char.IsLetterOrDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+                //{
+                //    e.Handled = true;
+                //}
+
+            
+
+        }
+
 
         private void btnBuscar_Click(object sender, EventArgs e)
         {

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PrototipoDos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ed13687697c730202e65510d247fbcaae578c00")]
 [assembly: System.Reflection.AssemblyProductAttribute("PrototipoDos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PrototipoDos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

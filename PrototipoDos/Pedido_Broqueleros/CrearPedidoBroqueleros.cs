@@ -56,7 +56,7 @@ namespace PrototipoDos.Pedido_Broqueleros
 
             GridVerPedidos.CellFormatting += dataGridView1_CellFormatting;
 
-
+            txtBuscarEmpleado.KeyPress += txtBuscar_KeyPress;
 
         }
 
@@ -120,40 +120,40 @@ namespace PrototipoDos.Pedido_Broqueleros
 
         private void txtCientoCasquilla_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
 
         private void txtGramosDeCasquilla_KeyPress(object sender, KeyPressEventArgs e)
         {
 
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
 
         private void txtCientoDePernos_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
 
         private void txtGramosDePernos_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
 
         private void txtCientoDeTuerca_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
         //txtGramosDeTuerca_KeyPress
 
         private void txtGramosDeTuerca_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
 
 
         private void txtGramosDeSoldadura_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ValidalcionDeNumerosYLongitud(sender, e, 5);
+            ValidalcionDeNumerosYLongitud(sender, e, 10);
         }
 
         private void ValidalcionDeNumerosYLongitud(object sender, KeyPressEventArgs e, int Longitud)
@@ -181,6 +181,27 @@ namespace PrototipoDos.Pedido_Broqueleros
 
 
         }
+
+
+
+        private void txtBuscar_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+
+            if (textBox.TextLength >= 35 && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+            }
+
+
+            //// Verificar si el carácter ingresado es una letra o un número
+            //if (!char.IsLetterOrDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            //{
+            //    e.Handled = true;
+            //}
+        }
+
         #endregion
 
         #region CalculoPares
